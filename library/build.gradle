@@ -10,7 +10,7 @@ compileTestJava {
 }
 
 dependencies {
-    compile 'com.github.pengrad:java-telegram-bot-api:3.4.0'
+    compile 'com.github.pengrad:java-telegram-bot-api:4.9.0'
     compile 'org.springframework:spring-context:4.3.11.RELEASE'
     compile 'org.springframework:spring-web:4.3.11.RELEASE'
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
