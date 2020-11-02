@@ -1,4 +1,4 @@
-package com.github.telegram.sample;
+package com.github.telegram.bot;
 
 import com.github.telegram.mvc.api.BotController;
 import com.github.telegram.mvc.api.BotRequest;
@@ -59,5 +59,18 @@ public class SampleTelegramBotMvcMain implements TelegramMvcConfiguration {
         logger.info("User = {}", user);
 
         return new SendMessage(chatId, "I test bot");
+    }
+
+    @BotRequest("Паша*")
+    BaseRequest kek(String text,
+                      Long chatId,
+                      TelegramRequest telegramRequest,
+                      TelegramBot telegramBot,
+                      Update update,
+                      Message message,
+                      Chat chat,
+                      User user
+    ) {
+        return new SendMessage(chatId, user.username() + text);
     }
 }
