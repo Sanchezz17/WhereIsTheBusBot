@@ -1,0 +1,1 @@
+CREATE INDEX idx_name_transport_stop ON transport_stop (name)

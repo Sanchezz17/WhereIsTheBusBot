@@ -1,0 +1,1 @@
+CREATE INDEX idx_user_id_favorite_request ON favorite_request (user_id)
