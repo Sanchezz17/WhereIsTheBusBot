@@ -1,5 +1,5 @@
-set PGPASSWORD=4815162342
-set port=9999
+set PGPASSWORD=???
+set port=???
 set user=postgres
  
 psql -p %port% -U %user% -f 0-CreateDB-WhereIsTheTrolleybusOrTramBot.sql

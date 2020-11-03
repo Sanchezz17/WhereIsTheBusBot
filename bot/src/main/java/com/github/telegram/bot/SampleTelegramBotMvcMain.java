@@ -1,6 +1,5 @@
 package com.github.telegram.bot;
 
-import com.github.telegram.bot.db.TransportStop;
 import com.github.telegram.mvc.api.BotController;
 import com.github.telegram.mvc.api.BotRequest;
 import com.github.telegram.mvc.api.EnableTelegram;
@@ -14,14 +13,12 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.SendMessage;
-import com.github.telegram.bot.repos.TransportStopRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -30,14 +27,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @EnableTelegram
 @Configuration
-@EntityScan(basePackages = {"com.github.telegram.bot.db"})
-@EnableJpaRepositories(basePackages = {"com.github.telegram.bot.repos"})
+@ComponentScan
+@EnableAutoConfiguration
+@EnableJpaRepositories
 @BotController
 public class SampleTelegramBotMvcMain implements TelegramMvcConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(SampleTelegramBotMvcMain.class);
-
-    @Autowired
-    private TransportStopRepository transportStopRepository;
 
     @Autowired
     private Environment environment;
@@ -72,8 +67,7 @@ public class SampleTelegramBotMvcMain implements TelegramMvcConfiguration {
         logger.info("Chat = {}", chat);
         logger.info("User = {}", user);
 
-        TransportStop transportStop = transportStopRepository.getOne(123);
-        return new SendMessage(chatId, transportStop.name);
+        return new SendMessage(chatId, text);
     }
 
     @BotRequest("Паша*")
