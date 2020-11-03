@@ -4,7 +4,7 @@ public enum Transport {
     Trolleybus("Троллейбус"),
     Tram("Трамвай");
 
-    private String name;
+    private final String name;
 
     Transport(String name) {
         this.name = name;

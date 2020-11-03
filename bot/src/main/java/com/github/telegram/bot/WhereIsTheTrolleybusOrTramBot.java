@@ -1,5 +1,6 @@
 package com.github.telegram.bot;
 
+import com.github.telegram.bot.models.FirstLetter;
 import com.github.telegram.bot.models.Transport;
 import com.github.telegram.mvc.api.*;
 import com.github.telegram.mvc.config.TelegramBotBuilder;
@@ -74,6 +75,22 @@ public class WhereIsTheTrolleybusOrTramBot implements TelegramMvcConfiguration {
         return response;
     }
 
+    private SendMessage sendFirstLetterPrompt(Long chatId) {
+        //toDo этот метод похож на метод выше, выделить общую логику и переиспользовать
+        ArrayList<InlineKeyboardButton> keyboardButtons = new ArrayList<InlineKeyboardButton>();
+        for (FirstLetter letter : FirstLetter.values())
+        {
+            Character value = letter.getValue();
+            String callbackData = String.format("/letter %s", value);
+            keyboardButtons.add(new InlineKeyboardButton(value.toString()).callbackData(callbackData));
+        }
+        Keyboard inlineKeyboardMarkup = new InlineKeyboardMarkup(
+                keyboardButtons.toArray(new InlineKeyboardButton[0]));
+        SendMessage response = new SendMessage(chatId, "Введите первую букву из названия остановки");
+        response.replyMarkup(inlineKeyboardMarkup);
+        return response;
+    }
+
     @BotRequest(value = "/transport *", messageType = MessageType.INLINE_CALLBACK)
     SendMessage setTransportAndSendFirstLetterPrompt(String text, Long chatId, User user, TelegramBot telegramBot) {
         String transportStr = text.split(" ")[1];
@@ -83,17 +100,22 @@ public class WhereIsTheTrolleybusOrTramBot implements TelegramMvcConfiguration {
             return sendTransportPrompt(chatId);
         }
         usersTransport.put(user.id(), transport);
-        return new SendMessage(chatId, "Введите первую букву из названия остановки");
+        return sendFirstLetterPrompt(chatId);
     }
 
-//    @BotRequest(value = "/letter *", messageType = MessageType.INLINE_CALLBACK)
-//    SendMessage getTransportStopsByFirstLetter(String text, Long chatId, User user, TelegramBot telegramBot) {
-//        String letter = text.split(" ")[1];
-//        if (transport == null) {
-//            telegramBot.execute(new SendMessage(chatId, "Неизвестный вид общественного транспорта"));
-//            return sendTransportPrompt(chatId);
-//        }
-//        usersTransport.put(user.id(), transport);
-//        return new SendMessage(chatId, "Введите первую букву из названия остановки");
-//    }
+    @BotRequest(value = "/letter *", messageType = MessageType.INLINE_CALLBACK)
+    SendMessage getTransportStopsByFirstLetter(String text, Long chatId, User user, TelegramBot telegramBot) {
+        String letterStr = text.split(" ")[1];
+        if (letterStr.length() > 1) {
+            telegramBot.execute(new SendMessage(chatId, "Введите одну букву"));
+            return sendFirstLetterPrompt(chatId);
+        }
+        FirstLetter letter = FirstLetter.fromChar(letterStr.charAt(0));
+        if (letter == null) {
+            telegramBot.execute(new SendMessage(chatId, "На эту букву нет остановок"));
+            return sendFirstLetterPrompt(chatId);
+        }
+        // toDo вернуть список остановок
+        return new SendMessage(chatId, "Список остановок");
+    }
 }
