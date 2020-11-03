@@ -1,0 +1,1 @@
+CREATE INDEX idx_user_id_request_history ON request_history (user_id)

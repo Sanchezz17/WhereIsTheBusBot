@@ -1,0 +1,1 @@
+CREATE INDEX idx_transport_stop_id_server_links ON server_links (transport_stop_id)
