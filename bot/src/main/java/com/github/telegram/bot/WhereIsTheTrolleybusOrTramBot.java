@@ -1,7 +1,9 @@
 package com.github.telegram.bot;
 
+import com.github.telegram.bot.db.TransportStop;
 import com.github.telegram.bot.models.FirstLetter;
 import com.github.telegram.bot.models.Transport;
+import com.github.telegram.bot.repos.TransportStopRepository;
 import com.github.telegram.mvc.api.*;
 import com.github.telegram.mvc.config.TelegramBotBuilder;
 import com.github.telegram.mvc.config.TelegramMvcConfiguration;
@@ -25,6 +27,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @SpringBootApplication
 @EnableTelegram
@@ -34,6 +37,9 @@ import java.util.HashMap;
 public class WhereIsTheTrolleybusOrTramBot implements TelegramMvcConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(WhereIsTheTrolleybusOrTramBot.class);
     private HashMap<Integer, Transport> usersTransport = new HashMap<>();
+
+    @Autowired
+    private TransportStopRepository transportStopRepository;
 
     @Autowired
     private Environment environment;
@@ -97,7 +103,7 @@ public class WhereIsTheTrolleybusOrTramBot implements TelegramMvcConfiguration {
             if (i % chunkSize == 0) {
                 buttonRows[i / chunkSize] = new InlineKeyboardButton[Math.min(chunkSize, lettersCount - i)];
             }
-            Character value = FirstLetter.values()[i].getValue();
+            String value = FirstLetter.values()[i].getValue();
             String callbackData = String.format("/letter %s", value);
             InlineKeyboardButton button = new InlineKeyboardButton(value.toString()).callbackData(callbackData);
             buttonRows[i / chunkSize][i % chunkSize] = button;
@@ -127,12 +133,25 @@ public class WhereIsTheTrolleybusOrTramBot implements TelegramMvcConfiguration {
             telegramBot.execute(new SendMessage(chatId, "Введите одну букву"));
             return sendFirstLetterPrompt(chatId);
         }
-        FirstLetter letter = FirstLetter.fromChar(letterStr.charAt(0));
+        FirstLetter letter = FirstLetter.fromStr(letterStr);
         if (letter == null) {
             telegramBot.execute(new SendMessage(chatId, "На эту букву нет остановок"));
             return sendFirstLetterPrompt(chatId);
         }
-        // toDo вернуть список остановок
-        return new SendMessage(chatId, "Список остановок");
+        if (!usersTransport.containsKey(user.id())) {
+            return sendTransportPrompt(chatId);
+        }
+        TransportStop[] transportStops = transportStopRepository.findByNameStartsWith(letter.getValue())
+                .stream().filter(x -> x.transport == usersTransport.get(user.id())).toArray(TransportStop[]::new);
+        StringBuilder builder = new StringBuilder();
+        for (TransportStop transportStop : transportStops) {
+            builder.append(transportStop.name);
+            builder.append(" ");
+            if (transportStop.direction != null) {
+                builder.append(transportStop.direction);
+            }
+            builder.append("\n");
+        }
+        return new SendMessage(chatId, builder.toString());
     }
 }
