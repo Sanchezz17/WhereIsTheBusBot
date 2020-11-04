@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "server_links")
-public class ServerLinks {
+public class ServerLink {
     @Id
     public int id;
 

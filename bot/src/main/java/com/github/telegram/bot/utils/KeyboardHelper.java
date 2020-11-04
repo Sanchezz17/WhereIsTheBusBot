@@ -4,9 +4,10 @@ import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 
 public class KeyboardHelper {
-    public static <T extends Enum<T>> InlineKeyboardMarkup getInlineKeyboardFromEnumItems(
+    public static <T> InlineKeyboardMarkup getInlineKeyboardFromItems(
             T[] items,
             ValueGetter<T> valueGetter,
+            ValueGetter<T> callbackDataGetter,
             String commandName,
             int chunkSize
     ) {
@@ -16,8 +17,8 @@ public class KeyboardHelper {
             if (i % chunkSize == 0) {
                 buttonRows[i / chunkSize] = new InlineKeyboardButton[Math.min(chunkSize, itemsCount - i)];
             }
+            String callbackData = String.format("/%s %s", commandName, callbackDataGetter.getValue(items[i]));
             String value = valueGetter.getValue(items[i]);
-            String callbackData = String.format("/%s %s", commandName, value);
             InlineKeyboardButton button = new InlineKeyboardButton(value).callbackData(callbackData);
             buttonRows[i / chunkSize][i % chunkSize] = button;
         }
