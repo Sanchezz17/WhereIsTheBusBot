@@ -1,5 +1,7 @@
 package com.github.telegram.bot.db;
 
+import com.github.telegram.bot.models.Transport;
+
 import javax.persistence.*;
 
 @Entity
@@ -16,5 +18,5 @@ public class TransportStop {
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "transport_type")
-    public TransportType transportType;
+    public Transport transport;
 }

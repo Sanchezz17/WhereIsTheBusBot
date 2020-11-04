@@ -1,8 +1,8 @@
 package com.github.telegram.bot.models;
 
 public enum Transport {
-    Trolleybus("Троллейбус"),
-    Tram("Трамвай");
+    TRAM("Трамвай"),
+    TROLLEYBUS("Троллейбус");
 
     private final String name;
 

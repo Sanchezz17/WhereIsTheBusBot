@@ -19,7 +19,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,9 +29,11 @@ import java.util.HashMap;
 @SpringBootApplication
 @EnableTelegram
 @BotController
+@Configuration
+@EnableJpaRepositories
 public class WhereIsTheTrolleybusOrTramBot implements TelegramMvcConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(WhereIsTheTrolleybusOrTramBot.class);
-    private HashMap<Integer, Transport> usersTransport = new HashMap<Integer, Transport>();
+    private HashMap<Integer, Transport> usersTransport = new HashMap<>();
 
     @Autowired
     private Environment environment;
@@ -54,6 +58,15 @@ public class WhereIsTheTrolleybusOrTramBot implements TelegramMvcConfiguration {
                       Chat chat,
                       User user
     ) {
+        logger.info("Text = {}", text);
+        logger.info("ChatId or UserId = {}", chatId);
+        logger.info("Telegram Request = {}", telegramRequest);
+        logger.info("TelegramBot = {}", telegramBot);
+        logger.info("Update = {}", update);
+        logger.info("Message = {}", message);
+        logger.info("Chat = {}", chat);
+        logger.info("User = {}", user);
+
         SendMessage hello = new SendMessage(chatId, "Привет! Я - бот, который может подсказать" +
                 " через сколько минут приедет общественный транспорт на определенную остановку");
         telegramBot.execute(hello);
@@ -61,7 +74,7 @@ public class WhereIsTheTrolleybusOrTramBot implements TelegramMvcConfiguration {
     }
 
     private SendMessage sendTransportPrompt(Long chatId) {
-        ArrayList<InlineKeyboardButton> keyboardButtons = new ArrayList<InlineKeyboardButton>();
+        ArrayList<InlineKeyboardButton> keyboardButtons = new ArrayList<>();
         for (Transport transport : Transport.values())
         {
             String name = transport.getName();
@@ -70,23 +83,27 @@ public class WhereIsTheTrolleybusOrTramBot implements TelegramMvcConfiguration {
         }
         Keyboard inlineKeyboardMarkup = new InlineKeyboardMarkup(
                 keyboardButtons.toArray(new InlineKeyboardButton[0]));
-        SendMessage response = new SendMessage(chatId, "Выбери вид общественного транспорта");
+        SendMessage response = new SendMessage(chatId, "Выберите вид общественного транспорта");
         response.replyMarkup(inlineKeyboardMarkup);
         return response;
     }
 
     private SendMessage sendFirstLetterPrompt(Long chatId) {
         //toDo этот метод похож на метод выше, выделить общую логику и переиспользовать
-        ArrayList<InlineKeyboardButton> keyboardButtons = new ArrayList<InlineKeyboardButton>();
-        for (FirstLetter letter : FirstLetter.values())
-        {
-            Character value = letter.getValue();
+        int chunkSize = 8;
+        int lettersCount = FirstLetter.values().length;
+        InlineKeyboardButton[][] buttonRows = new InlineKeyboardButton[(int) Math.ceil(lettersCount / (double)chunkSize)][];
+        for (int i = 0; i < lettersCount; i++) {
+            if (i % chunkSize == 0) {
+                buttonRows[i / chunkSize] = new InlineKeyboardButton[Math.min(chunkSize, lettersCount - i)];
+            }
+            Character value = FirstLetter.values()[i].getValue();
             String callbackData = String.format("/letter %s", value);
-            keyboardButtons.add(new InlineKeyboardButton(value.toString()).callbackData(callbackData));
+            InlineKeyboardButton button = new InlineKeyboardButton(value.toString()).callbackData(callbackData);
+            buttonRows[i / chunkSize][i % chunkSize] = button;
         }
-        Keyboard inlineKeyboardMarkup = new InlineKeyboardMarkup(
-                keyboardButtons.toArray(new InlineKeyboardButton[0]));
-        SendMessage response = new SendMessage(chatId, "Введите первую букву из названия остановки");
+        Keyboard inlineKeyboardMarkup = new InlineKeyboardMarkup(buttonRows);
+        SendMessage response = new SendMessage(chatId, "Выберите первую букву из названия остановки");
         response.replyMarkup(inlineKeyboardMarkup);
         return response;
     }
