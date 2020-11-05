@@ -19,7 +19,6 @@ import com.pengrad.telegrambot.model.request.Keyboard;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
@@ -42,14 +41,20 @@ public class WhereIsTheTrolleybusOrTramBot implements TelegramMvcConfiguration {
     private final HashMap<Integer, Transport> usersTransport = new HashMap<>();
     private final HashMap<Integer, Map<String, List<TransportStop>>> usersTransportStops = new HashMap<>();
 
-    @Autowired
-    private TransportStopRepository transportStopRepository;
+    private final TransportStopRepository transportStopRepository;
 
-    @Autowired
-    private ServerLinksRepository serverLinksRepository;
+    private final ServerLinksRepository serverLinksRepository;
 
-    @Autowired
-    private Environment environment;
+    private final Environment environment;
+
+    public WhereIsTheTrolleybusOrTramBot(
+            TransportStopRepository transportStopRepository,
+            ServerLinksRepository serverLinksRepository,
+            Environment environment) {
+        this.transportStopRepository = transportStopRepository;
+        this.serverLinksRepository = serverLinksRepository;
+        this.environment = environment;
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(WhereIsTheTrolleybusOrTramBot.class);
