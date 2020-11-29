@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface TransportStopRepository extends JpaRepository<TransportStop, Integer> {
     List<TransportStop> findByNameStartsWithAndTransportEquals(String namePrefix, Transport transport);
+    List<TransportStop> findByName(String name);
 }
