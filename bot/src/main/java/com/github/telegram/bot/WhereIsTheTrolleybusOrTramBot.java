@@ -152,7 +152,7 @@ public class WhereIsTheTrolleybusOrTramBot implements TelegramMvcConfiguration {
         builder.append(String.format("Остановка %s (%s)\n", transportStop.name, transportStop.direction));
         String content = HtmlParser.parse(serverLink.link);
         builder.append(content);
-        return new SendMessage(chatId, builder.toString()).parseMode(ParseMode.Markdown);
+        return new SendMessage(chatId, builder.toString()).parseMode(ParseMode.HTML);
     }
 
     private SendMessage sendTransportPrompt(Long chatId) {
