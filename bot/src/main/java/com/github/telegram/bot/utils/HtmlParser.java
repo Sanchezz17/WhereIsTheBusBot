@@ -28,12 +28,10 @@ public class HtmlParser {
             String minutesToArrival = String.format("%s %s", rowText[1], rowText[2]);
             String distanceToArrival = String.format("%s %s", rowText[3], rowText[4]);
             String formattedRow = String.format(rowFormat, transportNumber, minutesToArrival, distanceToArrival);
-            System.out.println(formattedRow);
             builder.append(formattedRow);
         }
         builder.append("\n");
         builder.append("</pre>");
-        System.out.println(builder.toString());
         return builder.toString();
     }
 }
