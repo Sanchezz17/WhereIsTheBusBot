@@ -6,11 +6,11 @@
 - Введи пароль и запиши, он понадобится
 - Выбери порт и запомни (либо оставь дефолтный, но тоже запомни, вроде по дефолту всегда 5432)
 - Ждем пока установится
-- Теперь можете открыть pyAdmin и порадоваться, что у вас есть аналог ssms только в браузере :)
+- Теперь можете открыть pgAdmin и порадоваться, что у вас есть аналог ssms только в браузере :)
 - Добавляем в PATH путь до каталога bin postgres'а. У меня, например, такой 
  ```C:\Program Files\PostgreSQL\13\bin```
 - Далее в директории PostgresScripts редактируем файл create.bat. А именно вместо ??? ставим свои данные: пароль, порт
-- В файле application.yaml указываем в параметре spring.datasource.url правильный порт, например, jdbc:postgresql://localhost:5432/WhereIsTheTrolleybusOrTramBot,
+- В файле application.properties указываем в параметре spring.datasource.url правильный порт, например, jdbc:postgresql://localhost:5432/WhereIsTheTrolleybusOrTramBot,
  в параметре spring.datasource.password свой пароль
 - Открываем консольку в этой папке и запускаем create.bat. Следим, что всё прошло хорошо и всё создалось 
 - Заходим в C:\Program Files\PostgreSQL\13\data\pg_hba.conf и у всех методов ставим trust ( иначе падает :((( )
