@@ -6,6 +6,7 @@ import com.github.telegram.bot.models.FirstLetter;
 import com.github.telegram.bot.models.Transport;
 import com.github.telegram.bot.repos.ServerLinksRepository;
 import com.github.telegram.bot.repos.TransportStopRepository;
+import com.github.telegram.bot.utils.HtmlParser;
 import com.github.telegram.bot.utils.KeyboardHelper;
 import com.github.telegram.mvc.api.*;
 import com.github.telegram.mvc.config.TelegramBotBuilder;
@@ -16,6 +17,7 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.model.request.Keyboard;
+import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -148,9 +150,9 @@ public class WhereIsTheTrolleybusOrTramBot implements TelegramMvcConfiguration {
         TransportStop transportStop = transportStopRepository.findOne(transportStopId);
         StringBuilder builder = new StringBuilder();
         builder.append(String.format("Остановка %s (%s)\n", transportStop.name, transportStop.direction));
-        // toDo вместо этого Parser.parse(serverLink.link)
-        builder.append(serverLink.link);
-        return new SendMessage(chatId, builder.toString());
+        String content = HtmlParser.parse(serverLink.link);
+        builder.append(content);
+        return new SendMessage(chatId, builder.toString()).parseMode(ParseMode.Markdown);
     }
 
     private SendMessage sendTransportPrompt(Long chatId) {
