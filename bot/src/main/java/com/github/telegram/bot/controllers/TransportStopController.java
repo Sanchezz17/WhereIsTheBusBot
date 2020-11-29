@@ -24,7 +24,7 @@ public class TransportStopController {
     }
 
     @BotRequest(value = "/stop *", messageType = MessageType.INLINE_CALLBACK)
-    SendMessage getDirectionsByTransportStopName(String text, Long chatId) {
+    private SendMessage getDirectionsByTransportStopName(String text, Long chatId) {
         String transportStopName = text.split(" ", 2)[1];
         TransportStop[] transportStops = transportStopRepository.findByName(transportStopName)
                 .toArray(new TransportStop[0]);

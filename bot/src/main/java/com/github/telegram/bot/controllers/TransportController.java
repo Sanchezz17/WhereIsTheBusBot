@@ -20,7 +20,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @BotController
 public class TransportController {
     @BotRequest(value = "/transport *", messageType = MessageType.INLINE_CALLBACK)
-    SendMessage setTransportAndSendFirstLetterPrompt(String text, Long chatId, User user, TelegramBot telegramBot) {
+    private SendMessage setTransportAndSendFirstLetterPrompt(String text, Long chatId) {
         String transportStr = text.split(" ")[1];
         Transport transport = Transport.fromString(transportStr);
         return sendFirstLetterPrompt(chatId, transport);

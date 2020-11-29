@@ -6,6 +6,7 @@ import javax.persistence.*;
 @Table(name="favorite_request")
 public class FavoriteRequest {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int id;
 
     @Column(name = "user_id")
