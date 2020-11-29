@@ -9,6 +9,7 @@ import com.github.telegram.mvc.api.BotRequest;
 import com.github.telegram.mvc.api.EnableTelegram;
 import com.github.telegram.mvc.api.MessageType;
 import com.pengrad.telegrambot.model.User;
+import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -38,9 +39,9 @@ public class FavoriteStopController {
         favoriteRequest.userId = user.id();
         favoriteRequestRepository.save(favoriteRequest);
         String message = String.format(
-                "Остановка %s %s добавленна в избранное",
+                "Остановка <b>%s %s</b> добавленна в избранное",
                 transportStop.name,
                 transportStop.direction);
-        return new SendMessage(chatId, message);
+        return new SendMessage(chatId, message).parseMode(ParseMode.HTML);
     }
 }
