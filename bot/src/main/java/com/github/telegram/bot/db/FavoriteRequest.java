@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="favorite_request")
+@NamedEntityGraph(name = "favoriteRequest", attributeNodes = @NamedAttributeNode("transportStop"))
 public class FavoriteRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

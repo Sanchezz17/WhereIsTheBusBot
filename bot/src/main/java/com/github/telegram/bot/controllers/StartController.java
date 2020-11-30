@@ -1,5 +1,6 @@
 package com.github.telegram.bot.controllers;
 
+import com.github.telegram.bot.models.Command;
 import com.github.telegram.bot.models.Transport;
 import com.github.telegram.bot.utils.KeyboardHelper;
 import com.github.telegram.mvc.api.*;
@@ -44,10 +45,21 @@ public class StartController {
         SendMessage hello = new SendMessage(chatId, "Привет! Я - бот, который может подсказать" +
                 " через сколько минут приедет общественный транспорт на определенную остановку");
         telegramBot.execute(hello);
-        return sendTransportPrompt(text, chatId);
+        return sendStartPrompt(chatId);
     }
 
-    @BotRequest(value = "/command NEW *", messageType = MessageType.INLINE_CALLBACK)
+    @BotRequest(value = "/command START_OVER*", messageType = MessageType.INLINE_CALLBACK)
+    private SendMessage sendStartPrompt(Long chatId) {
+        Keyboard inlineKeyboardMarkup = KeyboardHelper.getInlineKeyboardFromItems(
+                Command.startCommands,
+                Command::getName,
+                Command::toString,
+                "command",
+                2);
+        return new SendMessage(chatId, "Выберите действие").replyMarkup(inlineKeyboardMarkup);
+    }
+
+    @BotRequest(value = "/command NEW*", messageType = MessageType.INLINE_CALLBACK)
     private SendMessage sendTransportPrompt(String text, Long chatId) {
         Keyboard inlineKeyboardMarkup = KeyboardHelper.getInlineKeyboardFromItems(
                 Transport.values(),

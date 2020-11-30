@@ -4,8 +4,6 @@ import com.github.telegram.bot.db.RequestHistoryItem;
 import com.github.telegram.bot.db.ServerLink;
 import com.github.telegram.bot.db.TransportStop;
 import com.github.telegram.bot.models.Command;
-import com.github.telegram.bot.models.FirstLetter;
-import com.github.telegram.bot.models.Transport;
 import com.github.telegram.bot.repos.RequestHistoryRepository;
 import com.github.telegram.bot.repos.ServerLinksRepository;
 import com.github.telegram.bot.repos.TransportStopRepository;
@@ -68,7 +66,7 @@ public class DirectionController {
 
     private Keyboard getKeyboard(int transportStopId) {
         return KeyboardHelper.getInlineKeyboardFromItems(
-                Command.values(),
+                Command.endCommands,
                 Command::getName,
                 command -> String.format("%s %s", command.toString(), transportStopId),
                 "command",
