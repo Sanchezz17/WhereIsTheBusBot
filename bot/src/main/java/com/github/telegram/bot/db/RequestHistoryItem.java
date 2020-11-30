@@ -5,9 +5,9 @@ import java.util.Date;
 
 @Entity
 @Table(name = "request_history")
-public class RequestHistory {
-
+public class RequestHistoryItem {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int id;
 
     @Column(name = "user_id")

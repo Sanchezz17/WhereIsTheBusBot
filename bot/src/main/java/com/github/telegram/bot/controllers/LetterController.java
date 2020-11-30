@@ -31,7 +31,7 @@ public class LetterController {
     }
 
     @BotRequest(value = "/letter *", messageType = MessageType.INLINE_CALLBACK)
-    SendMessage getTransportStopsByFirstLetter(String text, Long chatId) {
+    private SendMessage getTransportStopsByFirstLetter(String text, Long chatId) {
         String[] parameters = text.split(" ");
         String letterStr = parameters[1];
         FirstLetter letter = FirstLetter.fromString(letterStr);

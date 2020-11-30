@@ -7,8 +7,6 @@ import com.github.telegram.mvc.api.BotController;
 import com.github.telegram.mvc.api.BotRequest;
 import com.github.telegram.mvc.api.EnableTelegram;
 import com.github.telegram.mvc.api.MessageType;
-import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.model.request.Keyboard;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +18,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @BotController
 public class TransportController {
     @BotRequest(value = "/transport *", messageType = MessageType.INLINE_CALLBACK)
-    SendMessage setTransportAndSendFirstLetterPrompt(String text, Long chatId, User user, TelegramBot telegramBot) {
+    private SendMessage setTransportAndSendFirstLetterPrompt(String text, Long chatId) {
         String transportStr = text.split(" ")[1];
         Transport transport = Transport.fromString(transportStr);
         return sendFirstLetterPrompt(chatId, transport);
