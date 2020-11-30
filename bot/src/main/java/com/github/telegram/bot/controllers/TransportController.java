@@ -7,8 +7,6 @@ import com.github.telegram.mvc.api.BotController;
 import com.github.telegram.mvc.api.BotRequest;
 import com.github.telegram.mvc.api.EnableTelegram;
 import com.github.telegram.mvc.api.MessageType;
-import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.model.request.Keyboard;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.context.annotation.Configuration;

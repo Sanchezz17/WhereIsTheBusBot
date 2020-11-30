@@ -60,7 +60,7 @@ public class StartController {
     }
 
     @BotRequest(value = "/command NEW*", messageType = MessageType.INLINE_CALLBACK)
-    private SendMessage sendTransportPrompt(String text, Long chatId) {
+    private SendMessage sendTransportPrompt(Long chatId) {
         Keyboard inlineKeyboardMarkup = KeyboardHelper.getInlineKeyboardFromItems(
                 Transport.values(),
                 Transport::getName,

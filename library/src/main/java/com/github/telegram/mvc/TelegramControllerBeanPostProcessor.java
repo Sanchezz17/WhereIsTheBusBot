@@ -27,7 +27,7 @@ public class TelegramControllerBeanPostProcessor implements BeanPostProcessor, S
     private HandlerMethodContainer botHandlerMethodContainer;
 
     private final Set<Class<?>> nonAnnotatedClasses =
-            Collections.newSetFromMap(new ConcurrentHashMap<Class<?>, Boolean>(64));
+            Collections.newSetFromMap(new ConcurrentHashMap<>(64));
 
     public TelegramControllerBeanPostProcessor(HandlerMethodContainer botHandlerMethodContainer) {
         this.botHandlerMethodContainer = botHandlerMethodContainer;

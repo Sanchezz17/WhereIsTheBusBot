@@ -2,7 +2,6 @@ package com.github.telegram.bot.controllers;
 
 import com.github.telegram.bot.db.FavoriteRequest;
 import com.github.telegram.bot.db.TransportStop;
-import com.github.telegram.bot.models.Command;
 import com.github.telegram.bot.repos.FavoriteRequestRepository;
 import com.github.telegram.bot.repos.TransportStopRepository;
 import com.github.telegram.bot.utils.KeyboardHelper;
@@ -45,13 +44,13 @@ public class FavoriteStopController {
             favoriteRequest.userId = user.id();
             favoriteRequestRepository.save(favoriteRequest);
             message = String.format(
-                    "Остановка <b>%s %s</b> добавленна в избранное",
+                    "Остановка <b>%s (%s)</b> добавленна в избранное",
                     transportStop.name,
                     transportStop.direction);
         }
         else {
             message = String.format(
-                    "Остановка <b>%s %s</b> уже есть в избранном",
+                    "Остановка <b>%s (%s)</b> уже есть в избранном",
                     transportStop.name,
                     transportStop.direction);
         }
@@ -65,7 +64,7 @@ public class FavoriteStopController {
                 .toArray(new FavoriteRequest[0]);
         Keyboard inlineKeyboardMarkup = KeyboardHelper.getInlineKeyboardFromItems(
                 favoriteRequests,
-                request -> String.format("%s %s", request.transportStop.name, request.transportStop.direction),
+                request -> String.format("%s (%s)", request.transportStop.name, request.transportStop.direction),
                 request -> Integer.toString(request.transportStop.id),
                 "direction",
                 1);
