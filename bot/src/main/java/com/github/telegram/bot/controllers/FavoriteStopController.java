@@ -16,6 +16,9 @@ import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import javax.transaction.Transactional;
+
+@Transactional
 @EnableTelegram
 @Configuration
 @EnableJpaRepositories
@@ -33,33 +36,36 @@ public class FavoriteStopController {
     }
 
     @BotRequest(value = "/command ADD_TO_FAVORITE *", messageType = MessageType.INLINE_CALLBACK)
-    private SendMessage addTransportStopToFavorite(String text, Long chatId, User user) {
+    public SendMessage addTransportStopToFavorite(String text, Long chatId, User user) {
         int transportStopId = Integer.parseInt(text.split(" ")[2]);
+        System.out.println(transportStopId);
         TransportStop transportStop = transportStopRepository.findOne(transportStopId);
-        FavoriteRequest request = favoriteRequestRepository.findFirstByTransportStop(transportStop);
-        String message;
-        if (request == null) {
-            FavoriteRequest favoriteRequest = new FavoriteRequest();
-            favoriteRequest.transportStop = transportStop;
-            favoriteRequest.userId = user.id();
-            favoriteRequestRepository.save(favoriteRequest);
-            message = String.format(
-                    "Остановка <b>%s (%s)</b> добавленна в избранное",
-                    transportStop.name,
-                    transportStop.direction);
-        }
-        else {
-            message = String.format(
-                    "Остановка <b>%s (%s)</b> уже есть в избранном",
-                    transportStop.name,
-                    transportStop.direction);
-        }
+        FavoriteRequest favoriteRequest = new FavoriteRequest();
+        favoriteRequest.transportStop = transportStop;
+        favoriteRequest.userId = user.id();
+        favoriteRequestRepository.save(favoriteRequest);
+        String message = String.format(
+                "Остановка <b>%s (%s)</b> добавленна в избранное",
+                transportStop.name,
+                transportStop.direction);
+        return new SendMessage(chatId, message).parseMode(ParseMode.HTML);
+    }
 
+    @BotRequest(value = "/command REMOVE_FROM_FAVORITE *", messageType = MessageType.INLINE_CALLBACK)
+    public SendMessage removeTransportStopFromFavorite(String text, Long chatId, User user) {
+        int transportStopId = Integer.parseInt(text.split(" ")[2]);
+        System.out.println(transportStopId);
+        TransportStop transportStop = transportStopRepository.findOne(transportStopId);
+        favoriteRequestRepository.removeByTransportStopAndUserId(transportStop, user.id());
+        String message = String.format(
+                "Остановка <b>%s (%s)</b> удалена из избранного",
+                transportStop.name,
+                transportStop.direction);
         return new SendMessage(chatId, message).parseMode(ParseMode.HTML);
     }
 
     @BotRequest(value = "/command SHOW_FAVORITE*", messageType = MessageType.INLINE_CALLBACK)
-    private SendMessage showFavoriteStops(String text, Long chatId, User user) {
+    public SendMessage showFavoriteStops(String text, Long chatId, User user) {
         FavoriteRequest[] favoriteRequests = favoriteRequestRepository.findByUserId(user.id())
                 .toArray(new FavoriteRequest[0]);
         Keyboard inlineKeyboardMarkup = KeyboardHelper.getInlineKeyboardFromItems(
