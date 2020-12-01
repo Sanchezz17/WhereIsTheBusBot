@@ -11,6 +11,8 @@ import com.github.telegram.mvc.api.EnableTelegram;
 import com.github.telegram.mvc.api.MessageType;
 import com.pengrad.telegrambot.model.request.Keyboard;
 import com.pengrad.telegrambot.request.SendMessage;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 @BotController
 public class LetterController {
     private final TransportStopRepository transportStopRepository;
+    private final Logger log = LogManager.getLogger(LetterController.class);
 
     public LetterController(TransportStopRepository transportStopRepository) {
         this.transportStopRepository = transportStopRepository;
@@ -36,6 +39,7 @@ public class LetterController {
         String letterStr = parameters[1];
         FirstLetter letter = FirstLetter.fromString(letterStr);
         if (letter == null) {
+            log.info("Пользователь ввел символ, а мы его не нашли. Символ: " + letterStr);
             return new SendMessage(chatId, "На эту букву нет остановок");
         }
         String transportStr = parameters[2];
