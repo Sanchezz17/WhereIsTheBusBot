@@ -19,6 +19,8 @@ import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.model.request.Keyboard;
 import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
@@ -30,6 +32,8 @@ import java.util.Date;
 @EnableJpaRepositories
 @BotController
 public class DirectionController {
+    private static final Logger log = LogManager.getLogger(DirectionController.class);
+
     private final TransportStopRepository transportStopRepository;
 
     private final ServerLinksRepository serverLinksRepository;
@@ -68,6 +72,10 @@ public class DirectionController {
         request.datetime = new Date();
         request.transportStop = transportStop;
         request.userId = userId;
+        log.info(String.format(
+                "Пользователь сделал запрос по остановке. userId: %s, transportStopId: %s",
+                userId,
+                transportStop.id));
         requestHistoryRepository.save(request);
     }
 

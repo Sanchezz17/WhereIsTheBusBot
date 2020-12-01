@@ -577,3 +577,7 @@ INSERT INTO transport_stop VALUES (575, 'Южный пр.','на ст. Табачная фабрика', 1
 INSERT INTO transport_stop VALUES (576, 'Южный пр.','на Кварцевую', 1);
 INSERT INTO transport_stop VALUES (577, 'Ярославская','на ст. Коммунистическая', 1);
 INSERT INTO transport_stop VALUES (578, 'Ярославская','на Веер', 1);
+INSERT INTO transport_stop VALUES (579, '1-й км','на Пионерскую', 0);
+INSERT INTO transport_stop VALUES (580, '1-й км','на Техучилище', 0);
+INSERT INTO transport_stop VALUES (581, '1-й км','на Техучилище', 1);
+INSERT INTO transport_stop VALUES (582, '1-й км','на Ж/д вокзал, Пионерскую', 1);

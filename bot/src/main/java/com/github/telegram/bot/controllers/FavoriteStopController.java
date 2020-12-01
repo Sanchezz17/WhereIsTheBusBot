@@ -13,6 +13,8 @@ import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.model.request.Keyboard;
 import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
@@ -24,6 +26,8 @@ import javax.transaction.Transactional;
 @EnableJpaRepositories
 @BotController
 public class FavoriteStopController {
+    private static final Logger log = LogManager.getLogger(FavoriteStopController.class);
+
     private final TransportStopRepository transportStopRepository;
 
     private final FavoriteRequestRepository favoriteRequestRepository;
@@ -38,7 +42,6 @@ public class FavoriteStopController {
     @BotRequest(value = "/command ADD_TO_FAVORITE *", messageType = MessageType.INLINE_CALLBACK)
     public SendMessage addTransportStopToFavorite(String text, Long chatId, User user) {
         int transportStopId = Integer.parseInt(text.split(" ")[2]);
-        System.out.println(transportStopId);
         TransportStop transportStop = transportStopRepository.findOne(transportStopId);
         FavoriteRequest favoriteRequest = new FavoriteRequest();
         favoriteRequest.transportStop = transportStop;
@@ -48,19 +51,26 @@ public class FavoriteStopController {
                 "Остановка <b>%s (%s)</b> добавленна в избранное",
                 transportStop.name,
                 transportStop.direction);
+        log.info(String.format(
+                "Пользователь добавил остановку в избранное. userId: %s, transportStopId: %s",
+                user.id(),
+                transportStop.id));
         return new SendMessage(chatId, message).parseMode(ParseMode.HTML);
     }
 
     @BotRequest(value = "/command REMOVE_FROM_FAVORITE *", messageType = MessageType.INLINE_CALLBACK)
     public SendMessage removeTransportStopFromFavorite(String text, Long chatId, User user) {
         int transportStopId = Integer.parseInt(text.split(" ")[2]);
-        System.out.println(transportStopId);
         TransportStop transportStop = transportStopRepository.findOne(transportStopId);
         favoriteRequestRepository.removeByTransportStopAndUserId(transportStop, user.id());
         String message = String.format(
                 "Остановка <b>%s (%s)</b> удалена из избранного",
                 transportStop.name,
                 transportStop.direction);
+        log.info(String.format(
+                "Пользователь удалил остановку из избранного. userId: %s, transportStopId: %s",
+                user.id(),
+                transportStop.id));
         return new SendMessage(chatId, message).parseMode(ParseMode.HTML);
     }
 
