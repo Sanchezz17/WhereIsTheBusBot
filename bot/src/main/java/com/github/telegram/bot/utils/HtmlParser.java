@@ -27,8 +27,8 @@ public class HtmlParser {
         Elements rows = document.select("div > p~div:not(:last-of-type)");
 
         if (rows.isEmpty()){
-            log.error(String.format("Не смогли распарсить сайт с расписанием. Url: %s . Html: %s", url, document.text()));
-            return "К сожалению, сервис с расписание не работает. Попробуйте позже.";
+            log.error(String.format("Нет данных по остановке. Url: %s . Html: %s", url, document.text()));
+            return "Нет данных по остановке";
         }
 
         for (Element row : rows) {

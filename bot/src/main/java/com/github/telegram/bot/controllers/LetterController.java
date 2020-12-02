@@ -19,6 +19,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @EnableTelegram
@@ -26,8 +27,9 @@ import java.util.stream.Collectors;
 @EnableJpaRepositories
 @BotController
 public class LetterController {
+    private static final Logger log = LogManager.getLogger(LetterController.class);
+
     private final TransportStopRepository transportStopRepository;
-    private final Logger log = LogManager.getLogger(LetterController.class);
 
     public LetterController(TransportStopRepository transportStopRepository) {
         this.transportStopRepository = transportStopRepository;
@@ -53,12 +55,15 @@ public class LetterController {
     private SendMessage sendTransportStopNamePrompt(Long chatId, FirstLetter letter, Transport transport) {
         TransportStop[] transportStops = transportStopRepository.findByNameStartsWithAndTransportEquals(
                 letter.getValue(), transport).toArray(new TransportStop[0]);
-        Map<String, List<TransportStop>> transportStopsGroupsByDirection = Arrays.stream(transportStops)
-                .collect(Collectors.groupingBy(transportStop -> transportStop.name));
+        Map<String, TransportStop> transportStopsGroupsByDirection = Arrays.stream(transportStops)
+                .collect(Collectors.groupingBy(
+                        transportStop -> transportStop.name,
+                        Collectors.collectingAndThen(Collectors.toList(), values -> values.get(0))
+                ));
         Keyboard inlineKeyboardMarkup = KeyboardHelper.getInlineKeyboardFromItems(
-                transportStopsGroupsByDirection.keySet().toArray(new String[0]),
-                transportStopName -> transportStopName,
-                transportStopName -> transportStopName,
+                transportStopsGroupsByDirection.values().toArray(new TransportStop[0]),
+                transportStop -> transportStop.name,
+                transportStop -> String.format("%s %s", transportStop.id, transportStop.transport.getName()),
                 "stop",
                 1);
         return new SendMessage(chatId, "Выберите остановку")

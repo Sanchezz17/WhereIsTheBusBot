@@ -11,5 +11,7 @@ public interface FavoriteRequestRepository extends JpaRepository<FavoriteRequest
     @EntityGraph(value = "favoriteRequest", type = EntityGraph.EntityGraphType.LOAD)
     List<FavoriteRequest> findByUserId(int userId);
 
-    FavoriteRequest findFirstByTransportStop(TransportStop transportStop);
+    FavoriteRequest findByTransportStopAndUserId(TransportStop transportStop, int userId);
+
+    void removeByTransportStopAndUserId(TransportStop transportStop, int userId);
 }

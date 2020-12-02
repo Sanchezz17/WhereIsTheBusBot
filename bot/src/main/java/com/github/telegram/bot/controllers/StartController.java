@@ -10,8 +10,8 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.model.request.Keyboard;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -55,7 +55,7 @@ public class StartController {
     private SendMessage sendTransportPrompt(Long chatId) {
         Keyboard inlineKeyboardMarkup = KeyboardHelper.getInlineKeyboardFromItems(
                 Transport.values(),
-                Transport::getName,
+                transport -> String.format("%s %s", transport.getEmoji(), transport.getName()),
                 Transport::getName,
                 "transport",
                 2);

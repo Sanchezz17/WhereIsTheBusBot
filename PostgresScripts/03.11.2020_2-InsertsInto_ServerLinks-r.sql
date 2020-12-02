@@ -577,3 +577,7 @@ INSERT INTO server_links VALUES (575, 575, 'http://m.ettu.ru/station/962504');
 INSERT INTO server_links VALUES (576, 576, 'http://m.ettu.ru/station/962526');
 INSERT INTO server_links VALUES (577, 577, 'http://m.ettu.ru/station/962563');
 INSERT INTO server_links VALUES (578, 578, 'http://m.ettu.ru/station/962578');
+INSERT INTO server_links VALUES (579, 579, 'http://m.ettu.ru/station/1168');
+INSERT INTO server_links VALUES (580, 580, 'http://m.ettu.ru/station/1169');
+INSERT INTO server_links VALUES (581, 581, 'http://m.ettu.ru/station/962064');
+INSERT INTO server_links VALUES (582, 582, 'http://m.ettu.ru/station/962097');

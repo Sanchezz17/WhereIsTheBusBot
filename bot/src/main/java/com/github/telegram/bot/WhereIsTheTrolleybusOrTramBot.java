@@ -18,8 +18,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @Configuration
 @EnableJpaRepositories
 public class WhereIsTheTrolleybusOrTramBot implements TelegramMvcConfiguration {
-    private final Environment environment;
     private static final Logger log = LogManager.getLogger(WhereIsTheTrolleybusOrTramBot.class);
+
+    private final Environment environment;
 
     public WhereIsTheTrolleybusOrTramBot(Environment environment) {
         this.environment = environment;
