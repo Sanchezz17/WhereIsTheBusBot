@@ -80,10 +80,14 @@ public class FavoriteStopController {
                 .toArray(new FavoriteRequest[0]);
         Keyboard inlineKeyboardMarkup = KeyboardHelper.getInlineKeyboardFromItems(
                 favoriteRequests,
-                request -> String.format("%s (%s)", request.transportStop.name, request.transportStop.direction),
+                request -> String.format(
+                        "%s %s (%s)",
+                        request.transportStop.transport.getEmoji(),
+                        request.transportStop.name,
+                        request.transportStop.direction),
                 request -> Integer.toString(request.transportStop.id),
                 "direction",
                 1);
-        return new SendMessage(chatId, "Избранное").replyMarkup(inlineKeyboardMarkup);
+        return new SendMessage(chatId, "Избранное").parseMode(ParseMode.HTML).replyMarkup(inlineKeyboardMarkup);
     }
 }
