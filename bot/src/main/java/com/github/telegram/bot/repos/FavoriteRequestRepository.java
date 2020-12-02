@@ -13,5 +13,5 @@ public interface FavoriteRequestRepository extends JpaRepository<FavoriteRequest
 
     FavoriteRequest findByTransportStopAndUserId(TransportStop transportStop, int userId);
 
-    void removeByTransportStopAndUserId(TransportStop transportStop, int userId);
+    int removeByTransportStopAndUserId(TransportStop transportStop, int userId);
 }

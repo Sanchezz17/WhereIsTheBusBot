@@ -5,7 +5,8 @@ public enum Command {
     ADD_TO_FAVORITE("Добавить в избранное"),
     REMOVE_FROM_FAVORITE("Удалить из избранного"),
     NEW("Новый запрос"),
-    SHOW_FAVORITE("Избранное");
+    SHOW_FAVORITE("Избранное"),
+    ADMIN_COMMANDS("Список команд администратора");
 
     public static Command[] startCommands = new Command[] { Command.NEW, Command.SHOW_FAVORITE };
 
@@ -17,14 +18,5 @@ public enum Command {
 
     public String getName() {
         return this.name;
-    }
-
-    public static Command fromString(String text) {
-        for (Command command : Command.values()) {
-            if (command.name.equalsIgnoreCase(text)) {
-                return command;
-            }
-        }
-        return null;
     }
 }

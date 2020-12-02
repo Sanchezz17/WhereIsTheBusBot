@@ -5,6 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "request_history")
+@NamedEntityGraph(name = "requestHistory", attributeNodes = @NamedAttributeNode("transportStop"))
 public class RequestHistoryItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
