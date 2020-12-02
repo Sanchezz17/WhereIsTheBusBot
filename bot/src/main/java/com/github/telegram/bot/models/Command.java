@@ -5,7 +5,8 @@ public enum Command {
     ADD_TO_FAVORITE("Добавить в избранное"),
     REMOVE_FROM_FAVORITE("Удалить из избранного"),
     NEW("Новый запрос"),
-    SHOW_FAVORITE("Избранное");
+    SHOW_FAVORITE("Избранное"),
+    ADMIN_COMMANDS("Список команд администратора");
 
     public static Command[] startCommands = new Command[] { Command.NEW, Command.SHOW_FAVORITE };
 
