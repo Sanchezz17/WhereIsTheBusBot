@@ -39,4 +39,5 @@ shadowJar {
     mergeServiceFiles()
     exclude 'META-INF/*.DSA'
     exclude 'META-INF/*.RSA'
+    archiveFileName = "bot.jar"
 }
