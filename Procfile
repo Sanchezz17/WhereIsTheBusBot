@@ -1,1 +1,1 @@
-web: java -jar build/libs/java-telegram-bot-mvc-1.0-all.jar
+web: java -jar build/libs/java-telegram-bot-mvc-1.0.0-all.jar
