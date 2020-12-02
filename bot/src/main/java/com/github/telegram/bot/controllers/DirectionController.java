@@ -59,7 +59,11 @@ public class DirectionController {
         ServerLink serverLink = serverLinksRepository.findFirstByTransportStop_Id(transportStopId);
         TransportStop transportStop = transportStopRepository.findOne(transportStopId);
         StringBuilder builder = new StringBuilder();
-        builder.append(String.format("Остановка %s (%s)\n", transportStop.name, transportStop.direction));
+        builder.append(String.format(
+                "%s Остановка %s (%s)\n",
+                transportStop.transport.getEmoji(),
+                transportStop.name,
+                transportStop.direction));
         String content = HtmlParser.parse(serverLink.link);
         builder.append(content);
         saveRequest(transportStop, user.id());

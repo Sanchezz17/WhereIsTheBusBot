@@ -55,7 +55,7 @@ public class StartController {
     private SendMessage sendTransportPrompt(Long chatId) {
         Keyboard inlineKeyboardMarkup = KeyboardHelper.getInlineKeyboardFromItems(
                 Transport.values(),
-                Transport::getName,
+                transport -> String.format("%s %s", transport.getEmoji(), transport.getName()),
                 Transport::getName,
                 "transport",
                 2);
