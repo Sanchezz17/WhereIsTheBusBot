@@ -109,7 +109,6 @@ public class AdminController {
                     historyItem.transportStop.direction));
         }
         log.info(String.format("Админ %s просмотрел историю запросов", user.username()));
-        System.out.println(builder.toString());
         return new SendMessage(chatId, builder.toString()).parseMode(ParseMode.HTML);
     }
 
