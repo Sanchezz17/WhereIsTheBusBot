@@ -18,13 +18,4 @@ public enum Command {
     public String getName() {
         return this.name;
     }
-
-    public static Command fromString(String text) {
-        for (Command command : Command.values()) {
-            if (command.name.equalsIgnoreCase(text)) {
-                return command;
-            }
-        }
-        return null;
-    }
 }

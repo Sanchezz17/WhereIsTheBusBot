@@ -44,9 +44,9 @@ public enum FirstLetter {
         return this.value;
     }
 
-    public static FirstLetter fromString(String otherValue) {
+    public static FirstLetter fromString(String str) {
         for (FirstLetter letter : FirstLetter.values()) {
-            if (letter.value.equalsIgnoreCase(otherValue)) {
+            if (letter.value.equalsIgnoreCase(str)) {
                 return letter;
             }
         }

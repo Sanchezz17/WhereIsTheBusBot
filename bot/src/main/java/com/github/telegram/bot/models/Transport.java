@@ -24,9 +24,9 @@ public enum Transport {
         return this.emoji;
     }
 
-    public static Transport fromString(String text) {
+    public static Transport fromString(String str) {
         for (Transport transport : Transport.values()) {
-            if (transport.name.equalsIgnoreCase(text)) {
+            if (transport.name.equalsIgnoreCase(str)) {
                 return transport;
             }
         }
