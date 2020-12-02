@@ -1,0 +1,1 @@
+CREATE INDEX idx_user_name_user_right ON user_right (user_name)

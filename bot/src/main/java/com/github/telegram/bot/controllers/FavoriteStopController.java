@@ -75,7 +75,7 @@ public class FavoriteStopController {
     }
 
     @BotRequest(value = "/command SHOW_FAVORITE*", messageType = MessageType.INLINE_CALLBACK)
-    public SendMessage showFavoriteStops(String text, Long chatId, User user) {
+    public SendMessage showFavoriteStops(Long chatId, User user) {
         FavoriteRequest[] favoriteRequests = favoriteRequestRepository.findByUserId(user.id())
                 .toArray(new FavoriteRequest[0]);
         Keyboard inlineKeyboardMarkup = KeyboardHelper.getInlineKeyboardFromItems(
