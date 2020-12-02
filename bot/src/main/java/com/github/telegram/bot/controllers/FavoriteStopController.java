@@ -43,12 +43,20 @@ public class FavoriteStopController {
     public SendMessage addTransportStopToFavorite(String text, Long chatId, User user) {
         int transportStopId = Integer.parseInt(text.split(" ")[2]);
         TransportStop transportStop = transportStopRepository.findOne(transportStopId);
-        FavoriteRequest favoriteRequest = new FavoriteRequest();
-        favoriteRequest.transportStop = transportStop;
-        favoriteRequest.userId = user.id();
-        favoriteRequestRepository.save(favoriteRequest);
+        FavoriteRequest favoriteRequest = favoriteRequestRepository.findByTransportStopAndUserId(transportStop, user.id());
+        if (favoriteRequest != null) {
+            String message = String.format(
+                    "Остановка <b>%s (%s)</b> уже была добавлена в избранное",
+                    transportStop.name,
+                    transportStop.direction);
+            return new SendMessage(chatId, message).parseMode(ParseMode.HTML);
+        }
+        FavoriteRequest newFavoriteRequest = new FavoriteRequest();
+        newFavoriteRequest.transportStop = transportStop;
+        newFavoriteRequest.userId = user.id();
+        favoriteRequestRepository.save(newFavoriteRequest);
         String message = String.format(
-                "Остановка <b>%s (%s)</b> добавленна в избранное",
+                "Остановка <b>%s (%s)</b> добавлена в избранное",
                 transportStop.name,
                 transportStop.direction);
         log.info(String.format(
@@ -62,7 +70,14 @@ public class FavoriteStopController {
     public SendMessage removeTransportStopFromFavorite(String text, Long chatId, User user) {
         int transportStopId = Integer.parseInt(text.split(" ")[2]);
         TransportStop transportStop = transportStopRepository.findOne(transportStopId);
-        favoriteRequestRepository.removeByTransportStopAndUserId(transportStop, user.id());
+        int removedCount = favoriteRequestRepository.removeByTransportStopAndUserId(transportStop, user.id());
+        if (removedCount == 0) {
+            String message = String.format(
+                    "Остановка <b>%s (%s)</b> уже была удалена из избранного",
+                    transportStop.name,
+                    transportStop.direction);
+            return new SendMessage(chatId, message).parseMode(ParseMode.HTML);
+        }
         String message = String.format(
                 "Остановка <b>%s (%s)</b> удалена из избранного",
                 transportStop.name,
