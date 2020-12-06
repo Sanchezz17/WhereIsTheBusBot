@@ -1,1 +1,1 @@
-web: java -jar bot/build/libs/bot-1.0.jar
+web: java -Dserver.port=$PORT -jar bot/build/libs/bot-1.0.jar
