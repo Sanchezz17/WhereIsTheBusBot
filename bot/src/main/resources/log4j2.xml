@@ -2,7 +2,7 @@
 <Configuration>
     <Appenders>
         <LogzioAppender name="Logzio">
-            <logzioToken>${env:logzioToken}</logzioToken>
+            <logzioToken>${env:LOGZIO_TOKEN}</logzioToken>
             <logzioUrl>https://listener.logz.io:8071</logzioUrl>
             <logzioType>java</logzioType>
         </LogzioAppender>

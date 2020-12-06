@@ -7,7 +7,6 @@ import com.github.telegram.bot.repos.TransportStopRepository;
 import com.github.telegram.bot.utils.KeyboardHelper;
 import com.github.telegram.mvc.api.BotController;
 import com.github.telegram.mvc.api.BotRequest;
-import com.github.telegram.mvc.api.EnableTelegram;
 import com.github.telegram.mvc.api.MessageType;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.model.request.Keyboard;
@@ -15,15 +14,10 @@ import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import javax.transaction.Transactional;
 
 @Transactional
-@EnableTelegram
-@Configuration
-@EnableJpaRepositories
 @BotController
 public class FavoriteStopController {
     private static final Logger log = LogManager.getLogger(FavoriteStopController.class);

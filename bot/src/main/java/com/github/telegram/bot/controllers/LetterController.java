@@ -7,24 +7,16 @@ import com.github.telegram.bot.repos.TransportStopRepository;
 import com.github.telegram.bot.utils.KeyboardHelper;
 import com.github.telegram.mvc.api.BotController;
 import com.github.telegram.mvc.api.BotRequest;
-import com.github.telegram.mvc.api.EnableTelegram;
 import com.github.telegram.mvc.api.MessageType;
 import com.pengrad.telegrambot.model.request.Keyboard;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@EnableTelegram
-@Configuration
-@EnableJpaRepositories
 @BotController
 public class LetterController {
     private static final Logger log = LogManager.getLogger(LetterController.class);
