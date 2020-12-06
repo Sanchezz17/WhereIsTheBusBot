@@ -54,9 +54,7 @@ public class BotHandlerMethodReturnValueHandlerComposite implements BotHandlerMe
      */
     public BotHandlerMethodReturnValueHandlerComposite addHandlers(List<? extends BotHandlerMethodReturnValueHandler> handlers) {
         if (handlers != null) {
-            for (BotHandlerMethodReturnValueHandler handler : handlers) {
-                this.returnValueHandlers.add(handler);
-            }
+            this.returnValueHandlers.addAll(handlers);
         }
         return this;
     }

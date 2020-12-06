@@ -1,8 +1,5 @@
 package com.github.telegram.bot.models;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
-
 public enum Transport {
     TRAM("Трамвай", "\uD83D\uDE8A"),
     TROLLEYBUS("Троллейбус", "\uD83D\uDE8E");

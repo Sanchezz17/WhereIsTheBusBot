@@ -29,9 +29,7 @@ public class BotHandlerMethodArgumentResolverComposite implements BotHandlerMeth
      */
     public BotHandlerMethodArgumentResolverComposite addResolvers(List<? extends BotHandlerMethodArgumentResolver> resolvers) {
         if (resolvers != null) {
-            for (BotHandlerMethodArgumentResolver resolver : resolvers) {
-                this.argumentResolvers.add(resolver);
-            }
+            this.argumentResolvers.addAll(resolvers);
         }
         return this;
     }

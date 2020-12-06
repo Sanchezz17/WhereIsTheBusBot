@@ -12,27 +12,32 @@ public class TelegramRequest {
      * Оригинальный запрос пользователя
      */
     private final Update update;
+
     /**
      * Сообщение пользователя
      */
     private final Message message;
+
     /**
      * Идентификатор беседы
      */
     private final Long chatId;
+
     /**
      * Ссылка на сущьность Chat
      */
     private final Chat chat;
+
     /**
      * Ссылка на сущьность User
      */
-
     private final User user;
+
     /**
      * строка ввода пользователя
      */
     private final String text;
+
     /**
      * Сервис бота
      */
@@ -42,27 +47,32 @@ public class TelegramRequest {
      * Сессия диалога
      */
     private TelegramSession session;
+
     /**
      * Тип запроса
      */
-    private MessageType messageType = MessageType.MESSAGE;
+    private MessageType messageType;
 
     /**
      * переменные распарсенные из запроса
      */
     private Map<String, String> templateVariables;
+
     /**
-     * Паттрен для поиска запроса
+     * Паттерн для поиска запроса
      */
     private String basePattern;
+
     /**
      * Запрос который отправим в телеграмм
      */
     private BaseRequest baseRequest;
-    private BaseResponse baseResponse;
+
     /**
      * Ответ который ответил телеграмм
      */
+    private BaseResponse baseResponse;
+
     private boolean responseOk;
     private String responseText;
 
@@ -103,7 +113,6 @@ public class TelegramRequest {
                         this.text = callbackQuery.data();
                         this.messageType = MessageType.INLINE_CALLBACK;
                     } else {
-                        this.messageType = MessageType.MESSAGE;
                         this.user = null;
                         this.text = null;
                     }

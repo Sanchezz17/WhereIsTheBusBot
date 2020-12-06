@@ -4,7 +4,6 @@ import okhttp3.OkHttpClient;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Билдер конфигурации бота

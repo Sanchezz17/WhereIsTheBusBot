@@ -14,7 +14,7 @@ public class BotBaseRequestMethodProcessor
     }
 
     @Override
-    public void handleReturnValue(Object returnValue, MethodParameter returnType, TelegramRequest telegramRequest) throws Exception {
+    public void handleReturnValue(Object returnValue, MethodParameter returnType, TelegramRequest telegramRequest) {
         Class<?> paramType = returnType.getParameterType();
         if (BaseRequest.class.isAssignableFrom(paramType)) {
             if (!paramType.isInstance(returnValue)) {
