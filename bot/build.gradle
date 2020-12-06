@@ -44,3 +44,6 @@ dependencies {
     compile('io.logz.log4j2:logzio-log4j2-appender:1.0.12')
     compile('io.logz.log4j2:logzio-log4j2-appender:1.0.12')
 }
+
+task stage(dependsOn: ['build', 'clean'])
+build.mustRunAfter clean
