@@ -10,10 +10,6 @@ buildscript {
     }
 }
 
-plugins {
-    id "com.github.johnrengelman.shadow" version "6.1.0"
-}
-
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
@@ -26,8 +22,14 @@ jar {
     }
 }
 
-sourceCompatibility = JavaVersion.VERSION_15
-targetCompatibility = JavaVersion.VERSION_15
+group = 'com.github.telegram.bot'
+version = '1.0'
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+repositories {
+    mavenCentral()
+}
 
 dependencies {
     compile project(':library')
@@ -37,15 +39,8 @@ dependencies {
     compile('com.h2database:h2:1.4.200')
     compile('org.jsoup:jsoup:1.13.1')
     compile('javax.xml.bind:jaxb-api:2.3.1')
-    compile "org.apache.logging.log4j:log4j-api:2.13.3"
-    compile "org.apache.logging.log4j:log4j-core:2.13.3"
-    compile "io.logz.log4j2:logzio-log4j2-appender:1.0.12"
-    compile "io.logz.log4j2:logzio-log4j2-appender:1.0.12"
-}
-
-shadowJar {
-    mergeServiceFiles()
-    exclude 'META-INF/*.DSA'
-    exclude 'META-INF/*.RSA'
-    archiveFileName = "bot.jar"
+    compile('org.apache.logging.log4j:log4j-api:2.13.3')
+    compile('org.apache.logging.log4j:log4j-core:2.13.3')
+    compile('io.logz.log4j2:logzio-log4j2-appender:1.0.12')
+    compile('io.logz.log4j2:logzio-log4j2-appender:1.0.12')
 }
