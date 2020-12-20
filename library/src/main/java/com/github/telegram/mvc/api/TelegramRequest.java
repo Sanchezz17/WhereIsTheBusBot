@@ -36,7 +36,7 @@ public class TelegramRequest {
     /**
      * Сервис бота
      */
-    private TelegramBot telegramBot;
+    private final TelegramBot telegramBot;
 
     /**
      * Сессия диалога
@@ -225,13 +225,12 @@ public class TelegramRequest {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("TelegramRequest{");
-        sb.append("chatId=").append(chatId);
-        sb.append(", chat=").append(chat);
-        sb.append(", user=").append(user);
-        sb.append(", text='").append(text).append('\'');
-        sb.append(", messageType=").append(messageType);
-        sb.append('}');
-        return sb.toString();
+        String sb = "TelegramRequest{" + "chatId=" + chatId +
+                ", chat=" + chat +
+                ", user=" + user +
+                ", text='" + text + '\'' +
+                ", messageType=" + messageType +
+                '}';
+        return sb;
     }
 }

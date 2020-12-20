@@ -3,15 +3,10 @@ package com.github.telegram.mvc.handler;
 import com.github.telegram.mvc.api.TelegramRequest;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.core.MethodParameter;
-import org.springframework.core.ResolvableType;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.converter.HttpMessageConverter;
-
-import java.lang.reflect.Type;
 
 public class BotResponseBodyMethodProcessor implements BotHandlerMethodReturnValueHandler {
-    private ConversionService conversionService;
+    private final ConversionService conversionService;
 
     public BotResponseBodyMethodProcessor(ConversionService conversionService) {
 

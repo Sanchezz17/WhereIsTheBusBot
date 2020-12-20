@@ -8,7 +8,7 @@ public enum Command {
     SHOW_FAVORITE("Избранное"),
     ADMIN_COMMANDS("Список команд администратора");
 
-    public static Command[] startCommands = new Command[] { Command.NEW, Command.SHOW_FAVORITE };
+    public static final Command[] startCommands = new Command[] { Command.NEW, Command.SHOW_FAVORITE };
 
     private final String name;
 

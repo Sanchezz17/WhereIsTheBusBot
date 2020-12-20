@@ -17,7 +17,7 @@ import java.util.Arrays;
 
 class TelegramInvocableHandlerMethod extends HandlerMethod {
 
-    private ParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
+    private final ParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
     private BotHandlerMethodArgumentResolverComposite argumentResolvers;
     private BotHandlerMethodReturnValueHandlerComposite returnValueHandlers;
 
@@ -168,11 +168,11 @@ class TelegramInvocableHandlerMethod extends HandlerMethod {
      * @param text error message to append the HandlerMethod details to
      */
     protected String getDetailedErrorMessage(String text) {
-        StringBuilder sb = new StringBuilder(text).append("\n");
-        sb.append("HandlerMethod details: \n");
-        sb.append("Controller [").append(getBeanType().getName()).append("]\n");
-        sb.append("Method [").append(getBridgedMethod().toGenericString()).append("]\n");
-        return sb.toString();
+        String sb = text + "\n" +
+                "HandlerMethod details: \n" +
+                "Controller [" + getBeanType().getName() + "]\n" +
+                "Method [" + getBridgedMethod().toGenericString() + "]\n";
+        return sb;
     }
 
     public void setHandlerMethodArgumentResolvers(BotHandlerMethodArgumentResolverComposite handlerMethodArgumentResolvers) {

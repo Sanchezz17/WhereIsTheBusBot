@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class TelegramControllerBeanPostProcessor implements BeanPostProcessor, SmartInitializingSingleton {
     private static final Logger logger = LoggerFactory.getLogger(TelegramControllerBeanPostProcessor.class);
-    private HandlerMethodContainer botHandlerMethodContainer;
+    private final HandlerMethodContainer botHandlerMethodContainer;
 
     private final Set<Class<?>> nonAnnotatedClasses =
             Collections.newSetFromMap(new ConcurrentHashMap<>(64));

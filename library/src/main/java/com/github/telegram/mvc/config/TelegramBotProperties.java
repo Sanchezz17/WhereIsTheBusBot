@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class TelegramBotProperties implements Iterable<TelegramBotProperty> {
-    private Set<TelegramBotProperty> telegramBotProperties;
+    private final Set<TelegramBotProperty> telegramBotProperties;
 
     public TelegramBotProperties() {
         this.telegramBotProperties = new TreeSet<>((o1, o2) -> o1.getToken().compareToIgnoreCase(o2.getToken()));

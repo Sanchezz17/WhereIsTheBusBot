@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class BotTextVariableMethodArgumentResolver implements BotHandlerMethodArgumentResolver {
     private final Map<MethodParameter, NamedValueInfo> namedValueInfoCache =
             new ConcurrentHashMap<MethodParameter, NamedValueInfo>(256);
-    private ConversionService conversionService;
+    private final ConversionService conversionService;
 
     public BotTextVariableMethodArgumentResolver(ConversionService conversionService) {
         this.conversionService = conversionService;

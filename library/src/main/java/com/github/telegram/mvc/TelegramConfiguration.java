@@ -3,7 +3,6 @@ package com.github.telegram.mvc;
 import com.github.telegram.mvc.api.TelegramSession;
 import com.github.telegram.mvc.config.*;
 import com.google.common.base.Supplier;
-import com.google.common.base.Suppliers;
 import com.google.common.collect.Lists;
 import com.pengrad.telegrambot.TelegramBot;
 import okhttp3.Dispatcher;

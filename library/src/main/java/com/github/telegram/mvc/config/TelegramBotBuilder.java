@@ -4,14 +4,13 @@ import okhttp3.OkHttpClient;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Билдер конфигурации бота
  */
 public class TelegramBotBuilder {
 
-    private List<TelegramBotProperty.Builder> telegramBotProperties = new ArrayList<>();
+    private final List<TelegramBotProperty.Builder> telegramBotProperties = new ArrayList<>();
     private TelegramBotProperty.Builder lastBuilder;
 
     public TelegramBotBuilderExt token(String val) {
