@@ -13,7 +13,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 public class TransportController {
     @BotRequest(value = "/transport *", messageType = MessageType.INLINE_CALLBACK)
     private SendMessage setTransportAndSendFirstLetterPrompt(String text, Long chatId) {
-        String transportStr = text.split(" ")[1];
+        String transportStr = text.split("\\s+")[1];
         Transport transport = Transport.fromString(transportStr);
         return sendFirstLetterPrompt(chatId, transport);
     }

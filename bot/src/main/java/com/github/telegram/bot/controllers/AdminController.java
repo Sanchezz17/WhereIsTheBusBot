@@ -5,6 +5,7 @@ import com.github.telegram.bot.db.UserRight;
 import com.github.telegram.bot.models.Right;
 import com.github.telegram.bot.repos.RequestHistoryRepository;
 import com.github.telegram.bot.repos.UserRightRepository;
+import com.github.telegram.bot.utils.Extensions;
 import com.github.telegram.mvc.api.BotController;
 import com.github.telegram.mvc.api.BotRequest;
 import com.github.telegram.mvc.api.MessageType;
@@ -16,7 +17,9 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.ArrayList;
 import java.util.List;
+
 
 @BotController
 public class AdminController {
@@ -40,35 +43,37 @@ public class AdminController {
             return new SendMessage(chatId, "У вас недостаточно прав на выполнение данной операции");
         }
 
-        String[] textTokens = text.split(" ");
-        if (textTokens.length == 1) {
-            return new SendMessage(chatId,
-                    "Комманда введена некорректно. Использование: /addRight {username} {right} = admin");
-        }
-        String username = textTokens[1];
+        if (!text.matches("^\\s*/addRight\\s+\\w+\\s*\\w*\\s*$"))
+            return new SendMessage(chatId, "Комманда введена некорректно. Использование: /addRight {username} {right} = admin");
 
-        Right right = Right.Admin;
-        if (textTokens.length > 2) {
-            String rightStr = textTokens[2];
-            right = Right.fromString(rightStr);
-            if (right == null) {
-                return new SendMessage(chatId, String.format("Права <b>%s</b> не существует", rightStr))
+        String[] textTokens = text
+                                .trim()
+                                .split("\\s+");
+
+        String usernameToken = textTokens[1];
+        String rightToken = textTokens.length == 3
+                ? textTokens[2]
+                : "admin";
+
+        Right right = Right.fromString(rightToken);
+        if (right == null) {
+            return new SendMessage(chatId, String.format("Права <b>%s</b> не существует", rightToken))
                         .parseMode(ParseMode.HTML);
-            }
         }
 
-        if (userHaveRight(username, right)) {
+
+        if (userHaveRight(usernameToken, right)) {
             return new SendMessage(chatId, String.format(
-                    "Пользователь <b>%s</b> уже имеет право <b>%s</b>", username, right.getName()))
+                    "Пользователь <b>%s</b> уже имеет право <b>%s</b>", usernameToken, right.getName()))
                     .parseMode(ParseMode.HTML);
         }
 
         UserRight newAdminRight = new UserRight();
-        newAdminRight.username = username;
+        newAdminRight.username = usernameToken;
         newAdminRight.right = right;
         userRightRepository.save(newAdminRight);
-        log.info(String.format("Админ %s выдал права администратора пользователю %s", user.username(), username));
-        return new SendMessage(chatId, String.format("Пользователю <b>%s</b> выдано право %s", username, right.getName()))
+        log.info(String.format("Админ %s выдал права администратора пользователю %s", user.username(), usernameToken));
+        return new SendMessage(chatId, String.format("Пользователю <b>%s</b> выдано право %s", usernameToken, right.getName()))
                 .parseMode(ParseMode.HTML);
     }
 
@@ -77,33 +82,44 @@ public class AdminController {
         if (!userHaveRight(user.username(), Right.Admin)) {
             return new SendMessage(chatId, "У вас недостаточно прав на выполнение данной операции");
         }
-        int itemsCount = 10;
-        String[] textTokens = text.split(" ");
-        if (textTokens.length > 1) {
-            try {
-                itemsCount = Integer.parseInt(textTokens[1]);
-            } catch (Exception ex) {
-                return new SendMessage(chatId,
-                        "Комманда введена некорректно. Использование: /history {itemsCount} = 10");
-            }
+
+        if (!text.matches("^\\s*/history\\s*\\d*\\s*$"))
+            return new SendMessage(chatId, "Комманда введена некорректно. Использование: /history {itemsCount} = 10");
+
+        String[] textTokens = text
+                                .trim()
+                                .split("\\s+");
+
+        int itemsCount = textTokens.length == 2
+                            ? Integer.parseInt(textTokens[1])
+                            : 10;
+
+        List<RequestHistoryItem> history = requestHistoryRepository.getHistorySortedByDateDesc(new PageRequest(0, itemsCount));
+        ArrayList<String> historyMessageLines = FormatHistoryMessageLines(history);
+        List<List<String>> messages = Extensions.SplitArrayListBySizeOfInnerStrings(historyMessageLines, messageLengthLimit);
+
+        for(int i = 0; i < messages.size() - 1; i++) {
+            telegramBot.execute(new SendMessage(chatId, String.join("\n", messages.get(i)))
+                                        .parseMode(ParseMode.HTML)
+            );
         }
-        List<RequestHistoryItem> history = requestHistoryRepository
-                .getHistorySortedByDateDesc(new PageRequest(0, itemsCount));
-        StringBuilder builder = new StringBuilder("История запросов\n");
-        for (RequestHistoryItem historyItem : history) {
-            if (builder.length() > messageLengthLimit) {
-                telegramBot.execute(new SendMessage(chatId, builder.toString()).parseMode(ParseMode.HTML));
-                builder = new StringBuilder();
-            }
-            builder.append(String.format(
-                    "<i>%s</i> Пользователь <b>%s</b> запросил информацию по остановке <b>%s (%s)</b>\n\n",
+        log.info(String.format("Админ %s просмотрел историю запросов", user.username()));
+        return new SendMessage(chatId, String.join("\n", String.join("\n", messages.get(messages.size() - 1))))
+                .parseMode(ParseMode.HTML);
+    }
+
+    private ArrayList<String> FormatHistoryMessageLines(List<RequestHistoryItem> historyItems){
+        ArrayList<String> builder = new ArrayList<>();
+        builder.add("История запросов");
+        for (RequestHistoryItem historyItem : historyItems) {
+            builder.add(String.format(
+                    "<i>%s</i> Пользователь <b>%s</b> запросил информацию по остановке <b>%s (%s)</b>\n",
                     historyItem.datetime,
                     historyItem.userId,
                     historyItem.transportStop.name,
                     historyItem.transportStop.direction));
         }
-        log.info(String.format("Админ %s просмотрел историю запросов", user.username()));
-        return new SendMessage(chatId, builder.toString()).parseMode(ParseMode.HTML);
+        return builder;
     }
 
     @BotRequest(value = "/command ADMIN_COMMANDS*", messageType = MessageType.INLINE_CALLBACK)

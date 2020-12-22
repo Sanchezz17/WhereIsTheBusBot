@@ -33,15 +33,7 @@ public class StartController {
     }
 
     @BotRequest("/start")
-    private SendMessage start(String text,
-                      Long chatId,
-                      TelegramRequest telegramRequest,
-                      TelegramBot telegramBot,
-                      Update update,
-                      Message message,
-                      Chat chat,
-                      User user
-    ) {
+    private SendMessage start(Long chatId, TelegramBot telegramBot, User user) {
         log.info("Пользователь начал взаимодействие с ботом. userId: " + user.id());
         SendMessage hello = new SendMessage(chatId, "Привет! Я - бот, который может подсказать" +
                 " через сколько минут приедет общественный транспорт на определенную остановку");

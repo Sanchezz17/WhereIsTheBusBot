@@ -32,7 +32,7 @@ public class HtmlParser {
         }
 
         for (Element row : rows) {
-            String[] rowText = row.text().split(" ");
+            String[] rowText = row.text().split("\\s+");
             String transportNumber = rowText[0];
             String minutesToArrival = String.format("%s %s", rowText[1], rowText[2]);
             String distanceToArrival = String.format("%s %s", rowText[3], rowText[4]);

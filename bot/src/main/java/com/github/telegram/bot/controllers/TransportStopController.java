@@ -20,18 +20,20 @@ public class TransportStopController {
 
     @BotRequest(value = "/stop *", messageType = MessageType.INLINE_CALLBACK)
     private SendMessage getDirectionsByTransportStopName(String text, Long chatId) {
-        String[] textTokens = text.split(" ");
+        String[] textTokens = text.split("\\s+");
         int transportStopId = Integer.parseInt(textTokens[1]);
         Transport transport = Transport.fromString(textTokens[2]);
         String transportStopName = transportStopRepository.findOne(transportStopId).name;
-        TransportStop[] transportStops = transportStopRepository.findByNameAndTransport(transportStopName, transport)
-                .toArray(new TransportStop[0]);
-        Keyboard inlineKeyboardMarkup = KeyboardHelper.getInlineKeyboardFromItems(
-                transportStops,
-                transportStop -> transportStop.direction,
-                transportStop -> String.valueOf(transportStop.id),
-                "direction",
-                1);
+        TransportStop[] transportStops = transportStopRepository
+                                            .findByNameAndTransport(transportStopName, transport)
+                                            .toArray(new TransportStop[0]);
+        Keyboard inlineKeyboardMarkup = KeyboardHelper
+                .getInlineKeyboardFromItems(
+                                            transportStops,
+                                            transportStop -> transportStop.direction,
+                                            transportStop -> String.valueOf(transportStop.id),
+                                            "direction",
+                                            1);
         return new SendMessage(chatId, "Выберите направление движения").replyMarkup(inlineKeyboardMarkup);
     }
 }

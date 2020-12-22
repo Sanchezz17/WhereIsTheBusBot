@@ -22,7 +22,9 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @BotController
 public class DirectionController {
@@ -49,7 +51,7 @@ public class DirectionController {
 
     @BotRequest(value = "/direction *", messageType = MessageType.INLINE_CALLBACK)
     private SendMessage getScheduleByTransportStopId(String text, Long chatId, User user) {
-        int transportStopId = Integer.parseInt(text.split(" ")[1]);
+        int transportStopId = Integer.parseInt(text.split("\\s+")[1]);
         ServerLink serverLink = serverLinksRepository.findFirstByTransportStop_Id(transportStopId);
         TransportStop transportStop = transportStopRepository.findOne(transportStopId);
         StringBuilder builder = new StringBuilder();
@@ -78,14 +80,11 @@ public class DirectionController {
     }
 
     private Keyboard getEndKeyboard(TransportStop transportStop, int userId) {
-        ArrayList<Command> endCommands = new ArrayList<>();
-        endCommands.add(Command.START_OVER);
         FavoriteRequest request = favoriteRequestRepository.findByTransportStopAndUserId(transportStop, userId);
-        if (request == null) {
-            endCommands.add(Command.ADD_TO_FAVORITE);
-        } else {
-            endCommands.add(Command.REMOVE_FROM_FAVORITE);
-        }
+        List<Command> endCommands = Arrays.asList(
+                Command.START_OVER,
+                request == null ? Command.ADD_TO_FAVORITE : Command.REMOVE_FROM_FAVORITE
+        );
         return KeyboardHelper.getInlineKeyboardFromItems(
                 endCommands.toArray(new Command[0]),
                 Command::getName,

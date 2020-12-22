@@ -29,7 +29,7 @@ public class LetterController {
 
     @BotRequest(value = "/letter *", messageType = MessageType.INLINE_CALLBACK)
     private SendMessage getTransportStopsByFirstLetter(String text, Long chatId) {
-        String[] parameters = text.split(" ");
+        String[] parameters = text.split("\\s+");
         String letterStr = parameters[1];
         FirstLetter letter = FirstLetter.fromString(letterStr);
         if (letter == null) {
@@ -45,9 +45,11 @@ public class LetterController {
     }
 
     private SendMessage sendTransportStopNamePrompt(Long chatId, FirstLetter letter, Transport transport) {
-        TransportStop[] transportStops = transportStopRepository.findByNameStartsWithAndTransportEquals(
-                letter.getValue(), transport).toArray(new TransportStop[0]);
-        Map<String, TransportStop> transportStopsGroupsByDirection = Arrays.stream(transportStops)
+        TransportStop[] transportStops = transportStopRepository
+                                            .findByNameStartsWithAndTransportEquals(letter.getValue(), transport)
+                                            .toArray(new TransportStop[0]);
+        Map<String, TransportStop> transportStopsGroupsByDirection = Arrays
+                .stream(transportStops)
                 .collect(Collectors.groupingBy(
                         transportStop -> transportStop.name,
                         Collectors.collectingAndThen(Collectors.toList(), values -> values.get(0))

@@ -35,7 +35,7 @@ public class FavoriteStopController {
 
     @BotRequest(value = "/command ADD_TO_FAVORITE *", messageType = MessageType.INLINE_CALLBACK)
     public SendMessage addTransportStopToFavorite(String text, Long chatId, User user) {
-        int transportStopId = Integer.parseInt(text.split(" ")[2]);
+        int transportStopId = Integer.parseInt(text.split("\\s+")[2]);
         TransportStop transportStop = transportStopRepository.findOne(transportStopId);
         FavoriteRequest favoriteRequest = favoriteRequestRepository.findByTransportStopAndUserId(transportStop, user.id());
         if (favoriteRequest != null) {
@@ -62,12 +62,12 @@ public class FavoriteStopController {
 
     @BotRequest(value = "/command REMOVE_FROM_FAVORITE *", messageType = MessageType.INLINE_CALLBACK)
     public SendMessage removeTransportStopFromFavorite(String text, Long chatId, User user) {
-        int transportStopId = Integer.parseInt(text.split(" ")[2]);
+        int transportStopId = Integer.parseInt(text.split("\\s+")[2]);
         TransportStop transportStop = transportStopRepository.findOne(transportStopId);
         int removedCount = favoriteRequestRepository.removeByTransportStopAndUserId(transportStop, user.id());
         if (removedCount == 0) {
             String message = String.format(
-                    "Остановка <b>%s (%s)</b> уже была удалена из избранного",
+                    "Остановка <b>%s (%s)</b> не была в избранном",
                     transportStop.name,
                     transportStop.direction);
             return new SendMessage(chatId, message).parseMode(ParseMode.HTML);
